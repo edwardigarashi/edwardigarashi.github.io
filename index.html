@@ -1,122 +1,369 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>three.js css3d - youtube</title>
 		<meta charset="utf-8">
+		<title>three.js examples</title>
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="main.css">
-		<style>
-			body {
-				background-color: #ffffff;
-			}
-
-			#blocker {
-				position: absolute;
-				top: 0;
-				left: 0;
-				bottom: 0;
-				right: 0;
-			}
-		</style>
+		<link rel="shortcut icon" href="../files/favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="../files/main.css">
 	</head>
 	<body>
-		<div id="container"></div>
-		<div id="blocker"></div>
 
-		<script type="module">
+		<div id="panel">
 
-			import * as THREE from '../build/three.module.js';
+			<div id="header">
+				<h1><a href="https://threejs.org">three.js</a></h1>
 
-			import { TrackballControls } from './jsm/controls/TrackballControls.js';
-			import { CSS3DRenderer, CSS3DObject } from './jsm/renderers/CSS3DRenderer.js';
+				<div id="sections">
+					<a href="../docs/index.html#manual/introduction/Creating-a-scene">docs</a>
+					<span class="selected">examples</span>
+				</div>
 
-			let camera, scene, renderer;
-			let controls;
+				<div id="expandButton"></div>
+			</div>
 
-			function Element( id, x, y, z, ry ) {
+			<div id="panelScrim"></div>
 
-				const div = document.createElement( 'div' );
-				div.style.width = '480px';
-				div.style.height = '360px';
-				div.style.backgroundColor = '#000';
+			<div id="contentWrapper">
 
-				const iframe = document.createElement( 'iframe' );
-				iframe.style.width = '480px';
-				iframe.style.height = '360px';
-				iframe.style.border = '0px';
-				iframe.src = [ 'https://www.youtube.com/embed/', id, '?rel=0' ].join( '' );
-				div.appendChild( iframe );
+				<div id="inputWrapper">
+					<input placeholder="" type="text" id="filterInput" autocorrect="off" autocapitalize="off" spellcheck="false" />
+					<div id="exitSearchButton"></div>
+				</div>
 
-				const object = new CSS3DObject( div );
-				object.position.set( x, y, z );
-				object.rotation.y = ry;
+				<div id="content">
+					<img id="previewsToggler" src="./files/thumbnails.svg" width="20" height="20" />
+				</div>
+			</div>
 
-				return object;
+		</div>
+
+		<iframe id="viewer" name="viewer" allowfullscreen allowvr onmousewheel=""></iframe>
+
+		<a id="button" target="_blank"><img src="../files/ic_code_black_24dp.svg"></a>
+
+		<script>
+
+		const panel = document.getElementById( 'panel' );
+		const content = document.getElementById( 'content' );
+		const viewer = document.getElementById( 'viewer' );
+		const filterInput = document.getElementById( 'filterInput' );
+		const exitSearchButton = document.getElementById( 'exitSearchButton' );
+		const expandButton = document.getElementById( 'expandButton' );
+		const viewSrcButton = document.getElementById( 'button' );
+		const panelScrim = document.getElementById( 'panelScrim' );
+
+		const previewsToggler = document.getElementById( 'previewsToggler' );
+
+		const links = {};
+		const validRedirects = new Map();
+		const container = document.createElement( 'div' );
+
+		let selected = null;
+
+		init();
+
+		async function init() {
+
+			content.appendChild( container );
+
+			viewSrcButton.style.display = 'none';
+
+			const files = await ( await fetch( 'files.json' ) ).json();
+			const tags = await ( await fetch( 'tags.json' ) ).json();
+
+			for ( const key in files ) {
+
+				const section = files[ key ];
+
+				const header = document.createElement( 'h2' );
+				header.textContent = key;
+				header.setAttribute( 'data-category', key );
+				container.appendChild( header );
+
+				for ( let i = 0; i < section.length; i ++ ) {
+
+					const file = section[ i ];
+
+					const link = createLink( file );
+					container.appendChild( link );
+
+					links[ file ] = link;
+					validRedirects.set( file, file + '.html' );
+
+				}
+
+			}
+
+			if ( window.location.hash !== '' ) {
+
+				const file = window.location.hash.substring( 1 );
+
+				// use a predefined map of redirects to avoid untrusted URL redirection due to user-provided value
+
+				if ( validRedirects.has( file ) === true ) {
+
+					selectFile( file );
+					viewer.src = validRedirects.get( file );
+
+				}
+
+			}
+
+			filterInput.value = extractQuery();
+
+			if ( filterInput.value !== '' ) {
+
+				panel.classList.add( 'searchFocused' );
+
+			}
+
+			updateFilter( files, tags );
+
+			// Events
+
+			filterInput.onfocus = function ( ) {
+
+				panel.classList.add( 'searchFocused' );
 
 			};
 
-			init();
-			animate();
+			filterInput.onblur = function ( ) {
 
-			function init() {
+				if ( filterInput.value === '' ) {
 
-				const container = document.getElementById( 'container' );
+					panel.classList.remove( 'searchFocused' );
 
-				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
-				camera.position.set( 500, 350, 750 );
+				}
 
-				scene = new THREE.Scene();
+			};
 
-				renderer = new CSS3DRenderer();
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				container.appendChild( renderer.domElement );
+			exitSearchButton.onclick = function ( ) {
 
-				const group = new THREE.Group();
-				group.add( new Element( 'SJOz3qjfQXU', 0, 0, 240, 0 ) );
-				group.add( new Element( 'Y2-xZ-1HE-Q', 240, 0, 0, Math.PI / 2 ) );
-				group.add( new Element( 'IrydklNpcFI', 0, 0, - 240, Math.PI ) );
-				group.add( new Element( '9ubytEsCaS0', - 240, 0, 0, - Math.PI / 2 ) );
-				scene.add( group );
+				filterInput.value = '';
+				updateFilter( files, tags );
+				panel.classList.remove( 'searchFocused' );
 
-				controls = new TrackballControls( camera, renderer.domElement );
-				controls.rotateSpeed = 4;
+			};
 
-				window.addEventListener( 'resize', onWindowResize );
+			filterInput.addEventListener( 'input', function () {
 
-				// Block iframe events when dragging camera
+				updateFilter( files, tags );
 
-				const blocker = document.getElementById( 'blocker' );
-				blocker.style.display = 'none';
+			} );
 
-				controls.addEventListener( 'start', function () {
 
-					blocker.style.display = '';
+			expandButton.addEventListener( 'click', function ( event ) {
 
-				} );
-				controls.addEventListener( 'end', function () {
+				event.preventDefault();
+				panel.classList.toggle( 'open' );
 
-					blocker.style.display = 'none';
+			} );
 
-				} );
+			panelScrim.onclick = function ( event ) {
+
+				event.preventDefault();
+				panel.classList.toggle( 'open' );
+
+			};
+
+			previewsToggler.onclick = function ( event ) {
+
+				event.preventDefault();
+				content.classList.toggle( 'minimal' );
+
+			};
+
+			// iOS iframe auto-resize workaround
+
+			if ( /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
+
+				viewer.style.width = getComputedStyle( viewer ).width;
+				viewer.style.height = getComputedStyle( viewer ).height;
+				viewer.setAttribute( 'scrolling', 'no' );
+
+			}
+
+		}
+
+		function createLink( file ) {
+
+			const template = `
+				<div class="card">
+					<a href="${file}.html" target="viewer">
+						<div class="cover">
+							<img src="screenshots/${ file }.jpg" loading="lazy" width="400" />
+						</div>
+						<div class="title">${getName( file )}</div>
+					</a>
+				</div>
+			`;
+
+			const link = createElementFromHTML( template );
+
+			link.querySelector( 'a[target="viewer"]' ).addEventListener( 'click', function ( event ) {
+
+				if ( event.button !== 0 || event.ctrlKey || event.altKey || event.metaKey ) return;
+
+				selectFile( file );
+
+			} );
+
+			return link;
+
+		}
+
+		function selectFile( file ) {
+
+			if ( selected !== null ) links[ selected ].classList.remove( 'selected' );
+
+			links[ file ].classList.add( 'selected' );
+
+			window.location.hash = file;
+			viewer.focus();
+
+			panel.classList.remove( 'open' );
+
+			selected = file;
+
+			// Reveal "View source" button and set attributes to this example
+			viewSrcButton.style.display = '';
+			viewSrcButton.href = 'https://github.com/mrdoob/three.js/blob/master/examples/' + selected + '.html';
+			viewSrcButton.title = 'View source code for ' + getName( selected ) + ' on GitHub';
+
+		}
+
+		function updateFilter( files, tags ) {
+
+			let v = filterInput.value.trim();
+			v = v.replace( /\s+/gi, ' ' ); // replace multiple whitespaces with a single one
+
+			if ( v !== '' ) {
+
+				window.history.replaceState( {}, '', '?q=' + v + window.location.hash );
+
+			} else {
+
+				window.history.replaceState( {}, '', window.location.pathname + window.location.hash );
 
 			}
 
-			function onWindowResize() {
+			const exp = new RegExp( v, 'gi' );
 
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-				renderer.setSize( window.innerWidth, window.innerHeight );
+			for ( const key in files ) {
+
+				const section = files[ key ];
+
+				for ( let i = 0; i < section.length; i ++ ) {
+
+					filterExample( section[ i ], exp, tags );
+
+				}
+
+			}
+
+			layoutList( files );
+
+		}
+
+		function filterExample( file, exp, tags ) {
+
+			const link = links[ file ];
+			const name = getName( file );
+			if ( file in tags ) file += ' ' + tags[ file ].join( ' ' );
+			const res = file.match( exp );
+			let text;
+
+			if ( res && res.length > 0 ) {
+
+				link.classList.remove( 'hidden' );
+
+				for ( let i = 0; i < res.length; i ++ ) {
+
+					text = name.replace( res[ i ], '<b>' + res[ i ] + '</b>' );
+
+				}
+
+				link.querySelector( '.title' ).innerHTML = text;
+
+			} else {
+
+				link.classList.add( 'hidden' );
+				link.querySelector( '.title' ).innerHTML = name;
 
 			}
 
-			function animate() {
+		}
 
-				requestAnimationFrame( animate );
-				controls.update();
-				renderer.render( scene, camera );
+		function getName( file ) {
+
+			const name = file.split( '_' );
+			name.shift();
+			return name.join( ' / ' );
+
+		}
+
+		function layoutList( files ) {
+
+			for ( const key in files ) {
+
+				let collapsed = true;
+
+				const section = files[ key ];
+
+				for ( let i = 0; i < section.length; i ++ ) {
+
+					const file = section[ i ];
+
+					if ( links[ file ].classList.contains( 'hidden' ) === false ) {
+
+						collapsed = false;
+						break;
+
+					}
+
+				}
+
+				const element = document.querySelector( 'h2[data-category="' + key + '"]' );
+
+				if ( collapsed ) {
+
+					element.classList.add( 'hidden' );
+
+				} else {
+
+					element.classList.remove( 'hidden' );
+
+				}
 
 			}
+
+		}
+
+		function extractQuery() {
+
+			const p = window.location.search.indexOf( '?q=' );
+
+			if ( p !== - 1 ) {
+
+				return decodeURI( window.location.search.substr( 3 ) );
+
+			}
+
+			return '';
+
+		}
+
+
+		function createElementFromHTML( htmlString ) {
+
+			const div = document.createElement( 'div' );
+			div.innerHTML = htmlString.trim();
+			return div.firstChild;
+
+		}
 
 		</script>
+
 	</body>
 </html>
