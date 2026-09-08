@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">Abstract secure service blueprint</title>
+  <desc id="desc">A monochrome architectural drawing with layered service boundaries and data paths.</desc>
+  <rect width="1200" height="750" fill="#d8d8d8"/>
+  <g fill="none" stroke="#111">
+    <path d="M0 125h1200M0 250h1200M0 375h1200M0 500h1200M0 625h1200" opacity=".15"/>
+    <path d="M150 0v750M300 0v750M450 0v750M600 0v750M750 0v750M900 0v750M1050 0v750" opacity=".15"/>
+    <rect x="81" y="72" width="1038" height="606" stroke-width="2"/>
+    <rect x="150" y="142" width="900" height="466" stroke-width="2"/>
+    <rect x="224" y="214" width="752" height="322" stroke-width="2"/>
+    <circle cx="600" cy="375" r="94" fill="#111"/>
+    <path d="M600 142v139M600 469v139M150 375h356M694 375h356" stroke-width="2"/>
+    <path d="m576 376 17 17 35-40" stroke="#ddd" stroke-width="7"/>
+  </g>
+  <g fill="#111" font-family="monospace" font-size="16" letter-spacing="2">
+    <text x="99" y="111">SERVICE BOUNDARY / 01</text>
+    <text x="168" y="181">CONTROL PLANE / 02</text>
+    <text x="243" y="253">TRUST ZONE / 03</text>
+    <text x="875" y="576">REV / 0.8</text>
+    <text x="86" y="714">SECURE SERVICE BLUEPRINT</text>
+  </g>
+</svg>

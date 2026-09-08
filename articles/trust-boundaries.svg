@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title description">
+  <title id="title">Trust boundaries</title>
+  <desc id="description">Nested architectural frames connected by precise monochrome lines.</desc>
+  <rect width="1200" height="750" fill="#080808"/>
+  <g fill="none" stroke="#383838">
+    <path d="M0 125h1200M0 250h1200M0 375h1200M0 500h1200M0 625h1200"/>
+    <path d="M200 0v750M400 0v750M600 0v750M800 0v750M1000 0v750"/>
+  </g>
+  <g fill="none" stroke="#f2f2f2">
+    <rect x="150" y="94" width="900" height="562"/>
+    <rect x="295" y="188" width="610" height="374" opacity=".75"/>
+    <rect x="440" y="281" width="320" height="188" opacity=".5"/>
+    <path d="M150 375h290M760 375h290M600 94v187M600 469v187" stroke-dasharray="12 12"/>
+  </g>
+  <circle cx="600" cy="375" r="17" fill="#f2f2f2"/>
+  <g fill="#aaa" font-family="monospace" font-size="18" letter-spacing="3">
+    <text x="174" y="126">TRUST / 01</text>
+    <text x="320" y="220">CONTROL / 02</text>
+    <text x="466" y="313">DECISION / 03</text>
+  </g>
+</svg>

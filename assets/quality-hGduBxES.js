@@ -1,0 +1,1 @@
+function c(t){const n=t.width*t.height;return n<7e4?"low":n<18e4?"medium":"high"}function s(t,n){return n[t]}function d(t,n,u,e=8){const a=Math.max(1,t.width),h=Math.max(1,t.height),i=Math.min(n,u/Math.max(a,h)),o=r=>Math.max(16,Math.round(r/e)*e);return{width:o(a*i),height:o(h*i)}}export{d as a,s as c,c as g};

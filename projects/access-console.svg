@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">Abstract access console interface</title>
+  <desc id="desc">A monochrome interface of access rules, system nodes, and a status graph.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8e8e8"/>
+      <stop offset="1" stop-color="#9a9a9a"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#111" stroke-opacity=".12"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <rect width="1200" height="750" fill="url(#grid)"/>
+  <rect x="74" y="70" width="1052" height="610" rx="5" fill="#0a0a0a"/>
+  <path d="M74 150h1052M370 150v530" stroke="#484848"/>
+  <circle cx="112" cy="111" r="7" fill="#e8e8e8"/>
+  <circle cx="140" cy="111" r="7" fill="#777"/>
+  <circle cx="168" cy="111" r="7" fill="#383838"/>
+  <g fill="#bbb" font-family="monospace" font-size="17" letter-spacing="2">
+    <text x="104" y="207">ACCESS LAYERS</text>
+    <text x="405" y="207">POLICY GRAPH / ACTIVE</text>
+  </g>
+  <g fill="#171717" stroke="#555">
+    <rect x="104" y="240" width="236" height="62"/>
+    <rect x="104" y="320" width="236" height="62"/>
+    <rect x="104" y="400" width="236" height="62"/>
+    <rect x="104" y="480" width="236" height="62"/>
+  </g>
+  <g fill="#d8d8d8" font-family="monospace" font-size="15">
+    <text x="127" y="278">IDENTITY</text>
+    <text x="127" y="358">DEVICE POSTURE</text>
+    <text x="127" y="438">WORKLOAD</text>
+    <text x="127" y="518">DATA SCOPE</text>
+  </g>
+  <g stroke="#9a9a9a" fill="#111">
+    <path d="M468 344L611 267 754 360 902 252 1043 352M468 344L615 477 754 360 909 493 1043 352" fill="none"/>
+    <circle cx="468" cy="344" r="16" fill="#e8e8e8"/>
+    <circle cx="611" cy="267" r="12"/>
+    <circle cx="615" cy="477" r="12"/>
+    <circle cx="754" cy="360" r="22" fill="#e8e8e8"/>
+    <circle cx="902" cy="252" r="12"/>
+    <circle cx="909" cy="493" r="12"/>
+    <circle cx="1043" cy="352" r="16" fill="#e8e8e8"/>
+  </g>
+  <g fill="#777" font-family="monospace" font-size="13" letter-spacing="1">
+    <text x="405" y="622">TRUST DECISIONS / 1,284</text>
+    <text x="942" y="622">STATUS / CLEAR</text>
+  </g>
+</svg>
+
