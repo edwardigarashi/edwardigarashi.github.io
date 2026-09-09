@@ -1,4 +1,4 @@
-import{S as p,P as c,B as d,V as h,a as f,A as v,L as P,b as m}from"./WebGLManager-sA1UzttP.js";import{c as g,d as s}from"./visualTheme-D3H7PJr5.js";import"./index-CbcRAWJb.js";const y=`precision highp float;
+import{S as p,P as c,B as d,V as h,a as f,A as v,L as P,b as m}from"./WebGLManager-B68qVaOA.js";import{c as g,d as s}from"./visualTheme-DHPPKk2d.js";import"./index-DWmZU-JA.js";const y=`precision highp float;
 
 uniform vec3 uColor;
 uniform float uOpacity;
