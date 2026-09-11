@@ -1,1 +1,0 @@
-import{h as s}from"./WebGLManager-B68qVaOA.js";function i(a,n,t,o){const r=o>0?o:.016666666666666666;return a+(n-a)*(1-Math.exp(-t*r))}function m(a,n,t){return Math.min(t,Math.max(n,a))}const c={primary:15263976,secondary:11053224,faint:6447714};function p(a){return new s(c[a])}export{m as a,p as c,i as d};
